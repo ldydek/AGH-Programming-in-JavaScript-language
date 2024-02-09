@@ -1,0 +1,64 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.green-component {
+    background-color: lightgreen;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+}
+
+.green-component > label > span {
+    color: red;
+    font-size: 30px;
+}
+
+.green-component > button {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-right: 5px;
+}
+
+.grey-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightgrey;
+    border-radius: 10px;
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.yellow-component {
+    flex: 1;
+    background-color: lightyellow;
+    border-radius: 10px;
+    width: 95%;
+    height: 50px;
+    padding: 10px 20px;
+}
+
+.red-component {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: rgb(255, 187, 187);
+    width: 95%;
+    height: 50px;
+}
+
+.red-component > input {
+    height: 20px;
+}
+
+.red-component > button {
+    padding-left: 3px;
+    padding-right: 3px;
+}

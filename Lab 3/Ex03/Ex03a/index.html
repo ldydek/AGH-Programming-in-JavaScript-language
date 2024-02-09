@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation</title>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <form id="form">
+        <h2>requestAnimationFrame()</h2>
+        <label for="counter">Counter→</label>
+        <output id="counter" style="font-size: 4vh; color: red;">0</output>
+        <br>
+        <button id="start">Start</button>
+        <button id="stop" disabled>Stop</button>
+        <!-- ************************************************************** -->
+        <hr>
+        <h2>Time-consuming calculations — version 1</h2>
+        <label for="result_main">Result:</label>
+        <output id="result_main">0</output>
+        <br>
+        <label for="iterations_main">Number of iterations:</label>
+        <input id="iterations_main" type="text" value="50">
+        <button id="iterations_main_btn">Run calculations</button>
+        <!-- ************************************************************** -->
+        <h2>Time-consuming calculations — version 2</h2>
+        <label for="result_worker">Result:</label>
+        <output id="result_worker">0</output>
+        <br>
+        <label for="iterations_worker">Number of iterations:</label>
+        <input id="iterations_worker" type="text" value="50">
+        <button id="iterations_worker_btn">Run calculations</button>
+    </form>
+</body>
+
+</html><br>

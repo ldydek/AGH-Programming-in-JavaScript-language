@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/react/umd/react.development.js" crossorigin=""></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin=""></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Title</title>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+    <script type="text/babel">
+
+        class GreenComponent extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { count: 0 };
+                this.interval = null;
+            }
+
+            startAnimation() {
+                const interval = setInterval(() => {
+                    this.setState({ count: this.state.count + 1 });
+                }, 10);
+                this.setState({ interval: interval });
+            }
+
+            stopAnimation() {
+                clearInterval(this.state.interval);
+            }
+
+            render() {
+                return <div className="green-component">
+                    <label>Counter→ <span>{this.state.count}</span></label>
+                    <br />
+                    <button onClick={() => this.startAnimation()}>Start</button>
+                    <button onClick={() => this.stopAnimation()}>Stop</button>
+                </div>;
+            }
+        }
+
+        class YellowComponent extends React.Component {
+            render() {
+                return (
+                    <div className="yellow-component">
+                        <p>Result: {this.props.result}</p>
+                    </div>
+                )
+            }
+        }
+
+        class RedComponent extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = { iterations: '' };
+                this.handleInputChange = this.handleInputChange.bind(this);
+                this.calculatePrimes = this.calculatePrimes.bind(this);
+            }
+
+            calculatePrimes() {
+                const { iterations } = this.state;
+                var primes = [];
+                for (var i = 0; i < iterations; i++) {
+                    var candidate = i * (1000000000 * Math.random());
+                    var isPrime = true;
+                    for (var c = 2; c <= Math.sqrt(candidate); ++c) {
+                        if (candidate % c === 0) {
+                            // not prime
+                            isPrime = false;
+                            break;
+                        }
+                    }
+                    if (isPrime) {
+                        primes.push(candidate);
+                    }
+                }
+                this.props.handleComputedValue(primes);
+                return primes;
+            }
+
+            handleInputChange(e) {
+                this.setState({ iterations: e.target.value });
+            }
+
+            render() {
+                return (
+                    <div className="red-component">
+                        <p>Number of iterations:</p>
+                        <input onChange={this.handleInputChange} />
+                        <button onClick={this.calculatePrimes}>Run calculation</button>
+                    </div>
+                )
+            }
+        }
+
+        class GreyComponent extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = { computedValue: null };
+                this.handleComputedValue = this.handleComputedValue.bind(this);
+            };
+
+            handleComputedValue(result) {
+                this.setState({ computedValue: result });
+            }
+
+            render() {
+                return (
+                    <div className="grey-component">
+                        <YellowComponent result={this.state.computedValue} />
+                        <RedComponent handleComputedValue={this.handleComputedValue} />
+                    </div>
+                );
+            }
+        }
+
+        class App extends React.Component {
+            render() {
+                return (
+                    <div className="App">
+                        <GreenComponent />
+                        <GreyComponent />
+                    </div>
+                );
+            }
+        }
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);  
+    </script>
+</body>
+
+</html>
