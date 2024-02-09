@@ -3,6 +3,7 @@
 
 import http from 'node:http';
 import { URL } from 'node:url';
+import querystring from 'node:querystring'
 
 /**
      * Handles incoming requests.
@@ -18,30 +19,30 @@ import { URL } from 'node:url';
 */
 
 function requestListener(request, response) {
-    console.log('--------------------------------------');
-    console.log(`The relative URL of the current request: ${request.url}`);
-    console.log(`Access method: ${request.method}`);
-    console.log('--------------------------------------');
-    // Create the URL object
-    const url = new URL(request.url, `http://${request.headers.host}`);
-    /* ************************************************** */
-    if (!request.headers['user-agent'])
-        console.log(url);
+  console.log('--------------------------------------');
+  console.log(`The relative URL of the current request: ${request.url}`);
+  console.log(`Access method: ${request.method}`);
+  console.log('--------------------------------------');
+  // Create the URL object
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  /* ************************************************** */
+  if (!request.headers['user-agent'])
+    console.log(url);
 
-    /* ******** */
-    /* "Routes" */
-    /* ******** */
-    /* ---------------- */
-    /* Route "GET('/')" */
-    /* ---------------- */
-    if (url.pathname === '/' && request.method === 'GET') {
-        // Generating the form if the relative URL is '/', and the GET method was used to send data to the server'
-        /* ************************************************** */
-        // Creating an answer header — we inform the browser that the returned data is HTML
-        response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        /* ************************************************** */
-        // Setting a response body
-        response.write(`
+  /* ******** */
+  /* "Routes" */
+  /* ******** */
+  /* ---------------- */
+  /* Route "GET('/')" */
+  /* ---------------- */
+  if (url.pathname === '/' && request.method === 'GET') {
+    // Generating the form if the relative URL is '/', and the GET method was used to send data to the server'
+    /* ************************************************** */
+    // Creating an answer header — we inform the browser that the returned data is HTML
+    response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    /* ************************************************** */
+    // Setting a response body
+    response.write(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -62,32 +63,47 @@ function requestListener(request, response) {
     </main>
   </body>
 </html>`);
-        /* ************************************************** */
-        response.end(); // The end of the response — send it to the browser
-    }
+    /* ************************************************** */
+    response.end(); // The end of the response — send it to the browser
+  }
 
-    /* ---------------------- */
-    /* Route "GET('/submit')" */
-    /* ---------------------- */
-    else if (url.pathname === '/submit' && request.method === 'GET') {
-        // Processing the form content, if the relative URL is '/submit', and the GET method was used to send data to the server'
-        /* ************************************************** */
-        // Creating an answer header — we inform the browser that the returned data is plain text
-        response.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-        /* ************************************************** */
-        // Place given data (here: 'Hello <name>') in the body of the answer
-        response.write(`Hello ${url.searchParams.get('name')}`); // "url.searchParams.get('name')" contains the contents of the field (form) named 'name'
-        /* ************************************************** */
-        response.end(); // The end of the response — send it to the browser
-    }
-    /* -------------------------- */
-    /* If no route is implemented */
-    /* -------------------------- */
-    else {
-        response.writeHead(501, { 'Content-Type': 'text/plain; charset=utf-8' });
-        response.write('Error 501: Not implemented');
-        response.end();
-    }
+  /* ---------------------- */
+  /* Route "GET('/submit')" */
+  /* ---------------------- */
+  else if (url.pathname === '/submit' && request.method === 'GET') {
+    // Processing the form content, if the relative URL is '/submit', and the GET method was used to send data to the server'
+    /* ************************************************** */
+    // Creating an answer header — we inform the browser that the returned data is plain text
+    response.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    /* ************************************************** */
+    // Place given data (here: 'Hello <name>') in the body of the answer
+    response.write(`Hello ${url.searchParams.get('name')}`); // "url.searchParams.get('name')" contains the contents of the field (form) named 'name'
+    /* ************************************************** */
+    response.end(); // The end of the response — send it to the browser
+  }
+  /* -------------------------- */
+  /* If no route is implemented */
+  /* -------------------------- */
+  else if (url.pathname === '/' && request.method === 'POST') {
+    let body = '';
+
+    request.on('data', data => {
+      body += data;
+      console.log("DSAD");
+    })
+
+    request.on('end', () => {
+      body = querystring.parse(body);
+      response.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+      response.write(`Hello ${body.name}`);
+      response.end();
+    });
+  }
+  else {
+    response.writeHead(501, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.write('Error 501: Not implemented');
+    response.end();
+  }
 }
 
 /* ************************************************** */
