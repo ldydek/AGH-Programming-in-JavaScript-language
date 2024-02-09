@@ -1,0 +1,24 @@
+<html>
+
+<head>
+    <script src="zadanie1.js" defer></script>
+</head>
+
+<body onLoad="
+            console.log('Tekst 1');
+            window.alert('Tekst 2');">
+    <div>Treść dokumentu HTML</div>
+    <div>Treść dokumentu HTML</div>
+    <div>Treść dokumentu HTML</div>
+    <form name="addition" oninput="wynik.value = pole_tekstowe.value + pole_liczbowe.value">
+        <input id="pole_tekstowe" placeholder="Wprowadź tekst" type="text">
+        +
+        <input id="pole_liczbowe" type="number" placeholder="Wprowadź liczbę">
+        =
+        <output name="wynik" for="pole_tekstowe pole_liczbowe">Tu pojawi się wynik obliczeń</output>
+        <br>
+        <input id="button" type="button" value="Wypisz">
+    </form>
+</body>
+
+</html>
