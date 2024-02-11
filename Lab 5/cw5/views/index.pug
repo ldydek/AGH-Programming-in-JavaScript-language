@@ -4,6 +4,7 @@ html(lang='en')
         meta(charset='utf-8')
         meta(name='viewport' content='width=device-width, initial-scale=1')
         title Second Express application
+        link(rel='stylesheet', href='styles/style.css')
     body
         main
             h1 Second Express application
@@ -14,11 +15,14 @@ html(lang='en')
                 input(type='submit')
                 input(type='reset')
             img(src='img/angry_cat.webp', alt='Angry cat')
-            table(style="border: 2px solid #000; width: 400px; height: 130px")
-                thead(style="background-color: #4CAF50; color: white;")
-                    th(style="width: 50%;") Nazwisko
+            table
+                thead
+                    th Nazwisko
                     th Imię
+                    th Wydział
                 each student in students 
-                    tr(style="text-align:center;")
+                    tr
                         td= student.lname
                         td= student.fname
+                        if student.faculty
+                            td= student.faculty

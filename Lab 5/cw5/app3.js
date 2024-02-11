@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { MongoClient } from 'mongodb';
 
 /* *************************** */
 /* Configuring the application */
@@ -9,17 +10,6 @@ import { fileURLToPath } from 'url';
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-let students = [
-    {
-        fname: 'Jan',
-        lname: 'Kowalski'
-    },
-    {
-        fname: 'Anna',
-        lname: 'Nowak'
-    },
-];
 
 app.set('views', __dirname + '/views'); // Files with views can be found in the 'views' directory
 app.set('view engine', 'pug'); // Use the 'Pug' template system
@@ -35,8 +25,16 @@ app.use(express.urlencoded({ extended: true }));
 /* "Routes" */
 /* ******** */
 
-app.get('/', function (request, response) {
-    response.render('index', { students: students }); // Render the 'index' view
+app.get('/', async function (request, response) {
+    const client = new MongoClient('mongodb://127.0.0.1:27017');
+    await client.connect();
+
+    const db = client.db('AGH');
+    const collection = db.collection('students');
+    const students = await collection.find({}).toArray();
+
+    response.render('index', { students: students });
+    client.close();
 });
 
 app.get('/submit', function (request, response) {
@@ -47,6 +45,19 @@ app.get('/submit', function (request, response) {
 app.post('/', function (request, response) {
     response.set('Content-Type', 'text/plain')
     response.send(`Hello ${request.body.name}`);
+});
+
+app.get('/:faculty', async function (request, response) {
+    const faculty = request.params.faculty;
+    const client = new MongoClient('mongodb://127.0.0.1:27017');
+    await client.connect();
+
+    const db = client.db('AGH');
+    const collection = db.collection('students');
+    const students = await collection.find({faculty: faculty}).toArray();
+
+    response.render('index', { students: students });
+    client.close();
 });
 
 /* ************************************************ */
